@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js">
+</script>
+<script src="https://requirejs.org/docs/release/2.3.5/minified/require.js">
+</script>
+
+<head>
+    <script>
+        async function loadModel() {
+            model = undefined;
+            model = await tf.loadLayersModel("https://raw.githubusercontent.com/tisa165/tfjsuci/main/model.json");
+            console.log("model loaded")
+        }
+        loadModel();
+
+        function make_prediction() {
+            var a, b, c, d, e, f, g, h, i, output;
+            a = Number(document.getElementById("first").value);
+            b = Number(document.getElementById("second").value);
+            c = Number(document.getElementById("third").value);
+            d = Number(document.getElementById("fourth").value);
+            e = Number(document.getElementById("fifth").value);
+            f = Number(document.getElementById("sixth").value);
+            g = Number(document.getElementById("seventh").value);
+            h = Number(document.getElementById("eighth").value);
+            i = Number(document.getElementById("nineth").value);
+
+
+            input_xs = tf.tensor2d([
+                [a, b, c, d, e, f, g, h, i]
+            ]);
+            output = model.predict(input_xs);
+            const outputData = output.dataSync();
+            document.getElementById("answer1").value = Number(outputData[0] > 0.5);
+        }
+    </script>
+</head>
+
+<body>
+    <center>
+        <p>
+            <h1>Video Quality Prediction</h1>
+        </p>
+        <br></br>
+    </center>
+    <center> This project uses several algorithms to classify tabular data representing different video quality inferred from YouTube encrypted traffic. The dataset used in here is public dataset that are intended to classify the Quality of Experience (QoE) experienced
+        by the end users. The goal is to predict what quality of video it is based on those features extracted of each data point. The data comes from the famous <a href="https://archive.ics.uci.edu/ml/datasets/Online+Video+Characteristics+and+Transcoding+Time+Dataset">UCI ML Video Transcoding</a>        data set.</center>
+    <br></br>
+    <left>Using the buttons below you can train a new model from scratch and test its performance.
+    </left>
+
+    <br></br>
+
+    <left>Please enter following features:</left>
+
+
+    <br></br>
+
+    <left>Duration :<input id="first"></left>
+
+    <br></br>
+
+    <left>Bitrate :<input id="second"></left>
+
+
+    <br></br>
+
+    <left>Bitrate Video :<input id="third"></left>
+
+
+    <br></br>
+
+    <left>Height :<input id="fourth"></left>
+
+
+    <br></br>
+
+    <left>Width :<input id="fifth"></left>
+
+    <br></br>
+
+    <left>Frame Rate :<input id="sixth"></left>
+
+    <br></br>
+
+    <left>Frame Rate Estimation :<input id="seventh"></left>
+
+    <br></br>
+
+    <left>Codec :<input id="eighth">
+        <left/>
+
+        <br></br>
+
+        <left>Category :<input id="nineth"></left><br></br>
+
+
+        <left><button onclick="make_prediction()">Predict</left></button>
+
+            <br></br>
+            <left>Random Forest Regressor<input id="answer1"></left>
+
+</body>
+
+</html>
